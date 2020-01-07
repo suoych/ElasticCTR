@@ -1,0 +1,40 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: milvus-service
+  labels:
+    app: milvus-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: milvus-service
+      labels:
+        app: milvus-service
+    spec:
+      containers:
+      - name: milvus-service
+        image: hub.baidubce.com/ctr/milvusdb/milvus:latest
+        imagePullPolicy: Always
+        workingDir: /var/lib/milvus/scripts
+        command: ['bash']
+        args: ['./start_server.sh']
+        ports:
+        - containerPort: 8080
+          name: milvus-service
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: milvus-service
+spec:
+  ports:
+    - name: milvus-service
+      port: 19530
+      targetPort: 19530
+    - name: fetch-metric
+      port: 8080
+      port: 8080
+  selector:
+    app: milvus-service
