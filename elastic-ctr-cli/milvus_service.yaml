@@ -29,6 +29,7 @@ kind: Service
 metadata:
   name: milvus-service
 spec:
+  type: LoadBalancer
   ports:
     - name: milvus-service
       port: 19530
